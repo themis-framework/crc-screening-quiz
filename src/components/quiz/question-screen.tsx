@@ -1,0 +1,204 @@
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { LanguageToggle } from "./language-toggle";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import type { QuizAnswers, AgeRange, YesNo, FamilyCount } from "@/lib/quiz-logic";
+
+interface QuestionScreenProps {
+  questionKey: string;
+  currentIndex: number;
+  totalQuestions: number;
+  answers: QuizAnswers;
+  onAnswer: (key: string, value: string) => void;
+  onNext: () => void;
+  onBack: () => void;
+  isLast: boolean;
+}
+
+function YesNoQuestion({
+  value,
+  onChange,
+}: {
+  value?: YesNo;
+  onChange: (v: YesNo) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex flex-col gap-3">
+      <button
+        type="button"
+        onClick={() => onChange("yes")}
+        className={`flex h-14 items-center justify-center rounded-md border text-base font-medium transition-all ${
+          value === "yes"
+            ? "border-primary bg-primary/10 text-primary"
+            : "border-border bg-card text-foreground hover:border-primary/50"
+        }`}
+      >
+        {t("quiz.yes")}
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("no")}
+        className={`flex h-14 items-center justify-center rounded-md border text-base font-medium transition-all ${
+          value === "no"
+            ? "border-primary bg-primary/10 text-primary"
+            : "border-border bg-card text-foreground hover:border-primary/50"
+        }`}
+      >
+        {t("quiz.no")}
+      </button>
+    </div>
+  );
+}
+
+function AgeQuestion({
+  value,
+  onChange,
+}: {
+  value?: AgeRange;
+  onChange: (v: AgeRange) => void;
+}) {
+  const { t } = useTranslation();
+  const options: { key: AgeRange; label: string }[] = [
+    { key: "under40", label: t("questions.age.under40") },
+    { key: "40to50", label: t("questions.age.40to50") },
+    { key: "50to60", label: t("questions.age.50to60") },
+    { key: "over60", label: t("questions.age.over60") },
+  ];
+
+  return (
+    <div className="flex flex-col gap-3">
+      {options.map((opt) => (
+        <button
+          key={opt.key}
+          type="button"
+          onClick={() => onChange(opt.key)}
+          className={`flex h-14 items-center justify-center rounded-md border text-base font-medium transition-all ${
+            value === opt.key
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border bg-card text-foreground hover:border-primary/50"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function FamilyCountQuestion({
+  value,
+  onChange,
+}: {
+  value?: FamilyCount;
+  onChange: (v: FamilyCount) => void;
+}) {
+  const { t } = useTranslation();
+  const options: { key: FamilyCount; label: string }[] = [
+    { key: "twoOrLess", label: t("questions.familyCount.twoOrLess") },
+    { key: "moreThanTwo", label: t("questions.familyCount.moreThanTwo") },
+  ];
+
+  return (
+    <div className="flex flex-col gap-3">
+      {options.map((opt) => (
+        <button
+          key={opt.key}
+          type="button"
+          onClick={() => onChange(opt.key)}
+          className={`flex h-14 items-center justify-center rounded-md border text-base font-medium transition-all ${
+            value === opt.key
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border bg-card text-foreground hover:border-primary/50"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function QuestionScreen({
+  questionKey,
+  currentIndex,
+  totalQuestions,
+  answers,
+  onAnswer,
+  onNext,
+  onBack,
+  isLast,
+}: QuestionScreenProps) {
+  const { t } = useTranslation();
+  const progress = ((currentIndex + 1) / totalQuestions) * 100;
+
+  const currentValue = answers[questionKey as keyof QuizAnswers];
+  const hasAnswer = currentValue !== undefined;
+
+  return (
+    <div className="flex min-h-svh flex-col bg-background">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
+        <div className="flex items-center justify-between p-4">
+          <Button variant="ghost" size="icon-sm" onClick={onBack}>
+            <ArrowLeftIcon />
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            {t("quiz.questionOf", {
+              current: currentIndex + 1,
+              total: totalQuestions,
+            })}
+          </span>
+          <LanguageToggle />
+        </div>
+
+        <div className="px-6">
+          <Progress value={progress} className="h-1.5" />
+        </div>
+
+        <div className="flex flex-1 flex-col justify-center px-6 pb-6">
+          <div className="mb-8 text-center">
+            <h2 className="mb-2 text-2xl font-semibold tracking-tight text-foreground">
+              {t(`questions.${questionKey}.title`)}
+            </h2>
+            <p className="text-sm font-light text-muted-foreground">
+              {t(`questions.${questionKey}.subtitle`)}
+            </p>
+          </div>
+
+          <div className="mb-8">
+            {questionKey === "age" && (
+              <AgeQuestion
+                value={answers.age}
+                onChange={(v) => onAnswer("age", v)}
+              />
+            )}
+            {questionKey === "familyCount" && (
+              <FamilyCountQuestion
+                value={answers.familyCount}
+                onChange={(v) => onAnswer("familyCount", v)}
+              />
+            )}
+            {questionKey !== "age" && questionKey !== "familyCount" && (
+              <YesNoQuestion
+                value={currentValue as YesNo | undefined}
+                onChange={(v) => onAnswer(questionKey, v)}
+              />
+            )}
+          </div>
+
+          <Button
+            size="lg"
+            onClick={onNext}
+            disabled={!hasAnswer}
+            className="w-full gap-2"
+          >
+            {isLast ? t("quiz.seeResults") : t("quiz.next")}
+            <ArrowRightIcon data-icon="inline-end" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
