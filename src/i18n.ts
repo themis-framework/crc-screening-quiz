@@ -14,86 +14,70 @@ const resources = {
         yes: "Да",
         no: "Нет",
         questionOf: "Вопрос {{current}} из {{total}}",
+        factsTitle: "Почему это важно",
+        facts: [
+          "В РФ колоректальный рак занимает **2-е место** в структуре смертности от злокачественных новообразований, уступая лишь раку легкого",
+          "**Менее 20%** случаев колоректального рака выявляется активно",
+          "**Около 50%** случаев выявляется на запущенных стадиях (III–IV)",
+          "Скрининг позволяет выявить заболевание **на ранней стадии** и снизить смертность",
+        ],
       },
       questions: {
         age: {
           title: "Сколько вам лет?",
           subtitle: "Укажите ваш возраст",
-          under40: "Младше 40",
-          "40to50": "40-50",
-          "50to60": "50-60",
-          over60: "Старше 60",
-        },
-        constipation: {
-          title: "Страдаете ли вы запорами?",
-          subtitle: "Регулярные проблемы со стулом",
+          under50: "Младше 50",
+          "50to64": "50-64",
+          "65to75": "65-75",
+          over75: "Старше 75",
         },
         blood: {
-          title: "Есть ли кровь в стуле?",
+          title: "Замечали ли вы кровь в стуле?",
           subtitle: "Наличие крови при дефекации",
         },
-        familyHistory: {
-          title: "Есть ли ближайшие родственники с колоректальным раком до 50 лет?",
+        familyEarly: {
+          title:
+            "Есть ли у вас родственники с колоректальным раком, выявленным до 50 лет?",
           subtitle: "Родители, братья, сестры, дети",
         },
-        familyCount: {
-          title: "Сколько родственников с колоректальным раком?",
-          subtitle: "Укажите количество",
-          twoOrLess: "2 или менее",
-          moreThanTwo: "Более 2",
+        familyMultiple: {
+          title:
+            "Есть ли у вас два и более родственников со злокачественными опухолями?",
+          subtitle:
+            "Колоректальный рак, рак тонкой кишки, мочевого пузыря, эндометрия, почки",
         },
-        colonoscopy: {
-          title: "Проходили ли вы колоноскопию?",
-          subtitle: "Диагностическое обследование кишечника",
+        diabetes: {
+          title: "Есть ли у вас сахарный диабет?",
+          subtitle: "Диагностированный сахарный диабет",
         },
-        polyps: {
-          title: "Были ли обнаружены полипы?",
-          subtitle: "Полипы при предыдущих обследованиях",
-        },
-        otherCancer: {
-          title: "Есть ли у вас другие злокачественные опухоли?",
-          subtitle: "Диагностированные онкологические заболевания",
+        ibdPolyposis: {
+          title:
+            "Есть ли у вас воспалительные заболевания или полипоз толстой кишки?",
+          subtitle: "Язвенный колит, болезнь Крона, полипы толстой кишки",
         },
       },
       results: {
         title: "Результаты скрининга",
-        riskLevel: "Уровень риска",
+        riskLevel: "Группа риска",
         recommendations: "Рекомендации",
         download: "Скачать чек-лист",
+        downloadPrep: "Памятка подготовки к колоноскопии (PDF)",
         restart: "Пройти заново",
-        medium: "Средний",
-        intermediate: "Промежуточный",
+        low: "Низкий",
         high: "Высокий",
-        mediumDesc:
-          "Ваш риск находится в пределах нормы. Рекомендуется стандартный скрининг.",
-        intermediateDesc:
-          "У вас выявлены факторы риска. Рекомендуется расширенное обследование.",
+        lowDesc:
+          "Вы относитесь к группе низкого риска колоректального рака. Придерживайтесь стандартной программы скрининга.",
         highDesc:
-          "Выявлены значительные факторы риска. Необходима консультация специалиста.",
+          "Вы относитесь к группе высокого риска колоректального рака. Это не означает, что заболевание есть или обязательно появится – просто вам важнее проходить обследования регулярно. Обсудите программу скрининга с врачом.",
         checklist: {
-          medium: [
-            "Ежегодный анализ кала на скрытую кровь",
-            "Колоноскопия каждые 10 лет после 50 лет",
-            "Поддержание здорового питания с высоким содержанием клетчатки",
-            "Регулярная физическая активность",
-            "Контроль массы тела",
-          ],
-          intermediate: [
-            "Консультация гастроэнтеролога в ближайшие 3 месяца",
-            "Колоноскопия каждые 3-5 лет",
-            "Ежегодный анализ кала на скрытую кровь",
-            "Генетическое тестирование при семейной истории",
-            "Регулярное наблюдение у онколога",
-            "Диета с ограничением красного мяса и переработанных продуктов",
+          low: [
+            "Фекальный иммунохимический тест (ФИТ) – 1 раз в 2 года",
+            "При положительном результате теста – выполнение колоноскопии (ФКС)",
           ],
           high: [
-            "Срочная консультация онколога-проктолога",
-            "Колоноскопия в ближайший месяц",
-            "КТ-колонография при необходимости",
-            "Генетическое консультирование",
-            "Ежегодный мониторинг опухолевых маркеров",
-            "Расширенное обследование желудочно-кишечного тракта",
-            "Составление индивидуального плана наблюдения",
+            "Фекальный иммунохимический тест (ФИТ) – 1 раз в год",
+            "При положительном результате теста – выполнение колоноскопии (ФКС)",
+            "Колоноскопия (ФКС) – 1 раз в 5 лет",
           ],
         },
         followUp: {
@@ -103,6 +87,13 @@ const resources = {
           cta: "Подключить напоминание в Telegram",
           toast:
             "Пока это макет: по клику откроется Telegram-бот, который через 2-4 недели спросит, выполнили ли вы рекомендации.",
+        },
+        doctor: {
+          title: "Хотите узнать больше?",
+          description:
+            "Профилактика, скрининг и ответы на частые вопросы – на страницах онкологического отделения Первого меда.",
+          instagram: "Отделение в Instagram",
+          website: "Сайт отделения",
         },
       },
       language: "Язык",
@@ -120,87 +111,69 @@ const resources = {
         yes: "Yes",
         no: "No",
         questionOf: "Question {{current}} of {{total}}",
+        factsTitle: "Why it matters",
+        facts: [
+          "In Russia, colorectal cancer is the **2nd leading cause** of cancer mortality, second only to lung cancer",
+          "**Less than 20%** of colorectal cancer cases are detected through active screening",
+          "**About 50%** of cases are diagnosed at advanced stages (III–IV)",
+          "Screening enables **early detection** and reduces mortality",
+        ],
       },
       questions: {
         age: {
           title: "How old are you?",
           subtitle: "Select your age range",
-          under40: "Under 40",
-          "40to50": "40-50",
-          "50to60": "50-60",
-          over60: "Over 60",
-        },
-        constipation: {
-          title: "Do you suffer from constipation?",
-          subtitle: "Regular bowel problems",
+          under50: "Under 50",
+          "50to64": "50-64",
+          "65to75": "65-75",
+          over75: "Over 75",
         },
         blood: {
-          title: "Is there blood in your stool?",
+          title: "Have you noticed blood in your stool?",
           subtitle: "Presence of blood during bowel movements",
         },
-        familyHistory: {
+        familyEarly: {
           title:
-            "Do you have close relatives with colorectal cancer before age 50?",
+            "Do you have relatives diagnosed with colorectal cancer before age 50?",
           subtitle: "Parents, siblings, children",
         },
-        familyCount: {
-          title: "How many relatives with colorectal cancer?",
-          subtitle: "Select the number",
-          twoOrLess: "2 or fewer",
-          moreThanTwo: "More than 2",
+        familyMultiple: {
+          title: "Do you have two or more relatives with malignant tumors?",
+          subtitle:
+            "Colorectal, small intestine, bladder, endometrial, or kidney cancer",
         },
-        colonoscopy: {
-          title: "Have you had a colonoscopy?",
-          subtitle: "Diagnostic bowel examination",
+        diabetes: {
+          title: "Do you have diabetes?",
+          subtitle: "Diagnosed diabetes mellitus",
         },
-        polyps: {
-          title: "Were polyps found?",
-          subtitle: "Polyps during previous examinations",
-        },
-        otherCancer: {
-          title: "Do you have other malignant tumors?",
-          subtitle: "Diagnosed oncological diseases",
+        ibdPolyposis: {
+          title:
+            "Do you have inflammatory bowel disease or colon polyposis?",
+          subtitle: "Ulcerative colitis, Crohn's disease, colon polyps",
         },
       },
       results: {
         title: "Screening Results",
-        riskLevel: "Risk Level",
+        riskLevel: "Risk Group",
         recommendations: "Recommendations",
         download: "Download Checklist",
+        downloadPrep: "Colonoscopy preparation guide (PDF, in Russian)",
         restart: "Start Over",
-        medium: "Medium",
-        intermediate: "Intermediate",
+        low: "Low",
         high: "High",
-        mediumDesc:
-          "Your risk is within normal range. Standard screening is recommended.",
-        intermediateDesc:
-          "Risk factors have been identified. Extended examination is recommended.",
+        lowDesc:
+          "You are in the low-risk group for colorectal cancer. Follow the standard screening program.",
         highDesc:
-          "Significant risk factors identified. Specialist consultation is required.",
+          "You are in the high-risk group for colorectal cancer. This does not mean you have or will necessarily develop the disease – it simply means regular screening matters more for you. Discuss a screening plan with your doctor.",
         checklist: {
-          medium: [
-            "Annual fecal occult blood test",
-            "Colonoscopy every 10 years after age 50",
-            "Maintain a high-fiber diet",
-            "Regular physical activity",
-            "Body weight management",
-          ],
-          intermediate: [
-            "Gastroenterologist consultation within 3 months",
-            "Colonoscopy every 3-5 years",
-            "Annual fecal occult blood test",
-            "Genetic testing if family history present",
-            "Regular oncologist follow-up",
-            "Diet limiting red and processed meat",
+          low: [
+            "Fecal immunochemical test (FIT) – once every 2 years",
+            "If the test is positive – colonoscopy",
           ],
           high: [
-            "Urgent oncologist-proctologist consultation",
-            "Colonoscopy within the next month",
-            "CT colonography if needed",
-            "Genetic counseling",
-            "Annual tumor marker monitoring",
-            "Extended gastrointestinal examination",
-            "Individual follow-up plan development",
+            "Fecal immunochemical test (FIT) – once a year",
+            "If the test is positive – colonoscopy",
+            "Colonoscopy – once every 5 years",
           ],
         },
         followUp: {
@@ -210,6 +183,13 @@ const resources = {
           cta: "Connect a Telegram reminder",
           toast:
             "This is just a mockup: clicking would open a Telegram bot that checks in with you in 2-4 weeks about whether you followed through.",
+        },
+        doctor: {
+          title: "Want to learn more?",
+          description:
+            "Prevention, screening, and answers to common questions – from the oncology department of Pavlov First Saint Petersburg State Medical University.",
+          instagram: "Department's Instagram",
+          website: "Department website",
         },
       },
       language: "Language",

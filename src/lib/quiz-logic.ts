@@ -1,60 +1,40 @@
-export type AgeRange = "under40" | "40to50" | "50to60" | "over60";
+export type AgeRange = "under50" | "50to64" | "65to75" | "over75";
 export type YesNo = "yes" | "no";
-export type FamilyCount = "twoOrLess" | "moreThanTwo";
-export type RiskCategory = "medium" | "intermediate" | "high";
+export type RiskCategory = "low" | "high";
 
 export interface QuizAnswers {
   age?: AgeRange;
-  constipation?: YesNo;
   blood?: YesNo;
-  familyHistory?: YesNo;
-  familyCount?: FamilyCount;
-  colonoscopy?: YesNo;
-  polyps?: YesNo;
-  otherCancer?: YesNo;
+  familyEarly?: YesNo;
+  familyMultiple?: YesNo;
+  diabetes?: YesNo;
+  ibdPolyposis?: YesNo;
 }
 
+// Критерии высокого риска по клиническим рекомендациям РФ (2025):
+// кровь в стуле; возраст 65-75 лет; родственники с КРР до 50 лет;
+// 2+ родственников с КРР / раком тонкой кишки, мочевого пузыря,
+// эндометрия, почки; сахарный диабет; ВЗК и полипоз толстой кишки.
+// Все остальные - группа низкого риска.
 export function calculateRisk(answers: QuizAnswers): RiskCategory {
-  let score = 0;
+  const isHigh =
+    answers.blood === "yes" ||
+    answers.age === "65to75" ||
+    answers.familyEarly === "yes" ||
+    answers.familyMultiple === "yes" ||
+    answers.diabetes === "yes" ||
+    answers.ibdPolyposis === "yes";
 
-  if (answers.age === "50to60") score += 1;
-  if (answers.age === "over60") score += 2;
-
-  if (answers.constipation === "yes") score += 1;
-  if (answers.blood === "yes") score += 2;
-
-  if (answers.familyHistory === "yes") {
-    score += 2;
-    if (answers.familyCount === "moreThanTwo") score += 2;
-  }
-
-  if (answers.polyps === "yes") score += 2;
-  if (answers.otherCancer === "yes") score += 3;
-
-  if (score >= 6) return "high";
-  if (score >= 3) return "intermediate";
-  return "medium";
+  return isHigh ? "high" : "low";
 }
 
-export function getVisibleQuestions(answers: QuizAnswers): string[] {
-  const questions = [
+export function getVisibleQuestions(_answers: QuizAnswers): string[] {
+  return [
     "age",
-    "constipation",
     "blood",
-    "familyHistory",
+    "familyEarly",
+    "familyMultiple",
+    "diabetes",
+    "ibdPolyposis",
   ];
-
-  if (answers.familyHistory === "yes") {
-    questions.push("familyCount");
-  }
-
-  questions.push("colonoscopy");
-
-  if (answers.colonoscopy === "yes") {
-    questions.push("polyps");
-  }
-
-  questions.push("otherCancer");
-
-  return questions;
 }

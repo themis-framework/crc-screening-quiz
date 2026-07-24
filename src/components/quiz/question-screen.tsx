@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LanguageToggle } from "./language-toggle";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import type { QuizAnswers, AgeRange, YesNo, FamilyCount } from "@/lib/quiz-logic";
+import type { QuizAnswers, AgeRange, YesNo } from "@/lib/quiz-logic";
 
 interface QuestionScreenProps {
   questionKey: string;
@@ -62,43 +62,10 @@ function AgeQuestion({
 }) {
   const { t } = useTranslation();
   const options: { key: AgeRange; label: string }[] = [
-    { key: "under40", label: t("questions.age.under40") },
-    { key: "40to50", label: t("questions.age.40to50") },
-    { key: "50to60", label: t("questions.age.50to60") },
-    { key: "over60", label: t("questions.age.over60") },
-  ];
-
-  return (
-    <div className="flex flex-col gap-3">
-      {options.map((opt) => (
-        <button
-          key={opt.key}
-          type="button"
-          onClick={() => onChange(opt.key)}
-          className={`flex h-14 items-center justify-center rounded-md border text-base font-medium transition-all ${
-            value === opt.key
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-card text-foreground hover:border-primary/50"
-          }`}
-        >
-          {opt.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function FamilyCountQuestion({
-  value,
-  onChange,
-}: {
-  value?: FamilyCount;
-  onChange: (v: FamilyCount) => void;
-}) {
-  const { t } = useTranslation();
-  const options: { key: FamilyCount; label: string }[] = [
-    { key: "twoOrLess", label: t("questions.familyCount.twoOrLess") },
-    { key: "moreThanTwo", label: t("questions.familyCount.moreThanTwo") },
+    { key: "under50", label: t("questions.age.under50") },
+    { key: "50to64", label: t("questions.age.50to64") },
+    { key: "65to75", label: t("questions.age.65to75") },
+    { key: "over75", label: t("questions.age.over75") },
   ];
 
   return (
@@ -168,19 +135,12 @@ export function QuestionScreen({
           </div>
 
           <div className="mb-8">
-            {questionKey === "age" && (
+            {questionKey === "age" ? (
               <AgeQuestion
                 value={answers.age}
                 onChange={(v) => onAnswer("age", v)}
               />
-            )}
-            {questionKey === "familyCount" && (
-              <FamilyCountQuestion
-                value={answers.familyCount}
-                onChange={(v) => onAnswer("familyCount", v)}
-              />
-            )}
-            {questionKey !== "age" && questionKey !== "familyCount" && (
+            ) : (
               <YesNoQuestion
                 value={currentValue as YesNo | undefined}
                 onChange={(v) => onAnswer(questionKey, v)}

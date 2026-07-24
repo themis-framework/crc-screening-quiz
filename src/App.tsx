@@ -9,6 +9,7 @@ import {
   calculateRisk,
   getVisibleQuestions,
 } from "@/lib/quiz-logic";
+import { trackGoal } from "@/lib/analytics";
 
 type Screen = "welcome" | "quiz" | "results";
 
@@ -16,36 +17,27 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>("welcome");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>({});
-  const [risk, setRisk] = useState<RiskCategory>("medium");
+  const [risk, setRisk] = useState<RiskCategory>("low");
 
   const visibleQuestions = getVisibleQuestions(answers);
   const safeIndex = Math.min(questionIndex, visibleQuestions.length - 1);
   const currentQuestion = visibleQuestions[safeIndex];
 
   const handleStart = useCallback(() => {
+    trackGoal("quiz_start");
     setScreen("quiz");
     setQuestionIndex(0);
   }, []);
 
-  const handleAnswer = useCallback(
-    (key: string, value: string) => {
-      setAnswers((prev) => {
-        const next = { ...prev, [key]: value };
-        if (key === "familyHistory" && value === "no") {
-          delete next.familyCount;
-        }
-        if (key === "colonoscopy" && value === "no") {
-          delete next.polyps;
-        }
-        return next;
-      });
-    },
-    []
-  );
+  const handleAnswer = useCallback((key: string, value: string) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
+  }, []);
 
   const handleNext = useCallback(() => {
     if (safeIndex >= visibleQuestions.length - 1) {
-      setRisk(calculateRisk(answers));
+      const result = calculateRisk(answers);
+      trackGoal("quiz_complete", { risk: result });
+      setRisk(result);
       setScreen("results");
     } else {
       setQuestionIndex(safeIndex + 1);

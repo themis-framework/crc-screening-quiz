@@ -5,16 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LanguageToggle } from "./language-toggle";
-import { toast } from "sonner";
 import {
+  AtSignIcon,
   DownloadIcon,
+  FileTextIcon,
+  GlobeIcon,
   RotateCcwIcon,
-  SendIcon,
   ShieldAlertIcon,
   ShieldCheckIcon,
-  TriangleAlertIcon,
 } from "lucide-react";
 import type { RiskCategory } from "@/lib/quiz-logic";
+import { downloadPrepPdf } from "@/lib/prep-pdf";
+import { trackGoal } from "@/lib/analytics";
+
+const DOCTOR_INSTAGRAM_URL = "https://www.instagram.com/1onko_spb/";
+const CLINIC_WEBSITE_URL = "https://onkoklinik.ru/";
 
 interface ResultsScreenProps {
   risk: RiskCategory;
@@ -30,32 +35,25 @@ const riskConfig: Record<
     iconClass: string;
   }
 > = {
-  medium: {
+  low: {
     icon: ShieldCheckIcon,
     badgeClass:
       "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200",
     iconContainerClass: "bg-emerald-100 dark:bg-emerald-900/50",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
-  intermediate: {
-    icon: TriangleAlertIcon,
+  high: {
+    icon: ShieldAlertIcon,
     badgeClass:
       "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200",
     iconContainerClass: "bg-amber-100 dark:bg-amber-900/50",
     iconClass: "text-amber-600 dark:text-amber-400",
   },
-  high: {
-    icon: ShieldAlertIcon,
-    badgeClass: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200",
-    iconContainerClass: "bg-red-100 dark:bg-red-900/50",
-    iconClass: "text-red-600 dark:text-red-400",
-  },
 };
 
 const riskColors: Record<RiskCategory, string> = {
-  medium: "#059669",
-  intermediate: "#d97706",
-  high: "#dc2626",
+  low: "#059669",
+  high: "#d97706",
 };
 
 function buildPdfHtml(
@@ -102,11 +100,8 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
     returnObjects: true,
   }) as unknown as string[];
 
-  const handleFollowUp = () => {
-    toast(t("results.followUp.toast"));
-  };
-
   const handleDownload = async () => {
+    trackGoal("checklist_download", { risk });
     const container = document.createElement("div");
     container.style.position = "absolute";
     container.style.left = "-9999px";
@@ -184,25 +179,53 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
 
           <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-4">
             <h3 className="mb-1 text-base font-semibold text-card-foreground">
-              {t("results.followUp.title")}
+              {t("results.doctor.title")}
             </h3>
             <p className="mb-4 text-sm font-light text-muted-foreground">
-              {t("results.followUp.description")}
+              {t("results.doctor.description")}
             </p>
-            <Button
-              variant="outline"
-              onClick={handleFollowUp}
-              className="w-full gap-2"
-            >
-              <SendIcon data-icon="inline-start" />
-              {t("results.followUp.cta")}
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" className="w-full gap-2" asChild>
+                <a
+                  href={DOCTOR_INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackGoal("instagram_click")}
+                >
+                  <AtSignIcon data-icon="inline-start" />
+                  {t("results.doctor.instagram")}
+                </a>
+              </Button>
+              <Button variant="outline" className="w-full gap-2" asChild>
+                <a
+                  href={CLINIC_WEBSITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackGoal("website_click")}
+                >
+                  <GlobeIcon data-icon="inline-start" />
+                  {t("results.doctor.website")}
+                </a>
+              </Button>
+            </div>
           </div>
 
           <div className="mt-auto flex flex-col gap-3">
             <Button size="lg" onClick={handleDownload} className="w-full gap-2">
               <DownloadIcon data-icon="inline-start" />
               {t("results.download")}
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => {
+                trackGoal("prep_download", { risk });
+                downloadPrepPdf();
+              }}
+              className="w-full gap-2"
+            >
+              <FileTextIcon data-icon="inline-start" />
+              {t("results.downloadPrep")}
             </Button>
             <Button
               size="lg"
