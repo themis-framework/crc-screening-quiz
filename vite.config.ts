@@ -4,13 +4,13 @@ import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   // GitHub Pages раздает сайт с подпути /<имя-репозитория>/
-  base: process.env.GITHUB_ACTIONS ? "/crc-screening-quiz/" : "/",
+  base: mode === "production" ? "/crc-screening-quiz/" : "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+}))
