@@ -62,7 +62,9 @@ const resources = {
         recommendations: "Рекомендации",
         download: "Скачать чек-лист",
         downloadPrep: "Памятка подготовки к колоноскопии (PDF)",
-        restart: "Пройти заново",
+        share: "Поделиться",
+        shareText: "Короткий опрос для оценки риска колоректального рака",
+        linkCopied: "Ссылка скопирована",
         low: "Низкий",
         high: "Высокий",
         lowDesc:
@@ -158,7 +160,9 @@ const resources = {
         recommendations: "Recommendations",
         download: "Download Checklist",
         downloadPrep: "Colonoscopy preparation guide (PDF, in Russian)",
-        restart: "Start Over",
+        share: "Share",
+        shareText: "A short survey to assess colorectal cancer risk",
+        linkCopied: "Link copied",
         low: "Low",
         high: "High",
         lowDesc:

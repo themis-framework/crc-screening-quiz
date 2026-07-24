@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LanguageToggle } from "./language-toggle";
+import { toast } from "sonner";
 import {
   AtSignIcon,
   DownloadIcon,
   FileTextIcon,
   GlobeIcon,
-  RotateCcwIcon,
+  Share2Icon,
 } from "lucide-react";
 import type { RiskCategory } from "@/lib/quiz-logic";
 import { downloadPrepPdf } from "@/lib/prep-pdf";
@@ -22,7 +23,6 @@ const CLINIC_WEBSITE_URL = "https://onkoklinik.ru/";
 
 interface ResultsScreenProps {
   risk: RiskCategory;
-  onRestart: () => void;
 }
 
 const riskConfig: Record<RiskCategory, { badgeClass: string }> = {
@@ -76,13 +76,46 @@ function buildPdfHtml(
   </div>`;
 }
 
-export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
+export function ResultsScreen({ risk }: ResultsScreenProps) {
   const { t } = useTranslation();
   const config = riskConfig[risk];
 
   const checklist = t(`results.checklist.${risk}`, {
     returnObjects: true,
   }) as unknown as string[];
+
+  const handleShare = async () => {
+    trackGoal("share_click");
+    const url = window.location.origin + window.location.pathname;
+    const shareData = {
+      title: t("quiz.title"),
+      text: t("results.shareText"),
+      url,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch {
+        // пользователь закрыл системное окно шэринга - это не ошибка
+        return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // clipboard API может быть недоступен - страховка через execCommand
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+    toast(t("results.linkCopied"));
+  };
 
   const handleDownload = async () => {
     trackGoal("checklist_download", { risk });
@@ -214,11 +247,11 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
             <Button
               size="lg"
               variant="outline"
-              onClick={onRestart}
+              onClick={handleShare}
               className="w-full gap-2"
             >
-              <RotateCcwIcon data-icon="inline-start" />
-              {t("results.restart")}
+              <Share2Icon data-icon="inline-start" />
+              {t("results.share")}
             </Button>
           </div>
         </div>

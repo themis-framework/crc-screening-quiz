@@ -52,12 +52,6 @@ export default function App() {
     }
   }, [safeIndex]);
 
-  const handleRestart = useCallback(() => {
-    setAnswers({});
-    setQuestionIndex(0);
-    setScreen("welcome");
-  }, []);
-
   if (screen === "welcome") {
     return (
       <>
@@ -70,7 +64,7 @@ export default function App() {
   if (screen === "results") {
     return (
       <>
-        <ResultsScreen risk={risk} onRestart={handleRestart} />
+        <ResultsScreen risk={risk} />
         <Toaster />
       </>
     );
