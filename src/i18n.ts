@@ -92,7 +92,7 @@ const resources = {
           title: "Хотите узнать больше?",
           description:
             "Профилактика, скрининг и ответы на частые вопросы – на страницах онкологического отделения Первого меда.",
-          instagram: "Отделение в Instagram",
+          instagram: "Instagram: 1onko_spb",
           website: "Сайт отделения",
         },
       },
@@ -188,7 +188,7 @@ const resources = {
           title: "Want to learn more?",
           description:
             "Prevention, screening, and answers to common questions – from the oncology department of Pavlov First Saint Petersburg State Medical University.",
-          instagram: "Department's Instagram",
+          instagram: "Instagram: 1onko_spb",
           website: "Department website",
         },
       },

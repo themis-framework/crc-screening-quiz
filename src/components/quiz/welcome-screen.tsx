@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "./language-toggle";
-import { ArrowRightIcon, CircleCheckIcon, ShieldCheckIcon } from "lucide-react";
+import { ArrowRightIcon, CircleCheckIcon } from "lucide-react";
+import colonImg from "@/static/colon.png";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -35,16 +36,18 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           <LanguageToggle />
         </div>
         <div className="flex flex-1 flex-col items-center justify-center px-6 pb-12">
-          <div className="mb-8 flex size-20 items-center justify-center rounded-2xl bg-primary/10">
-            <ShieldCheckIcon className="size-10 text-primary" />
-          </div>
+          <img
+            src={colonImg}
+            alt=""
+            className="mb-6 w-44 mix-blend-multiply"
+          />
           <h1 className="mb-3 text-center text-3xl font-semibold tracking-tight text-foreground">
             {t("quiz.title")}
           </h1>
           <p className="mb-8 max-w-xs text-center text-base font-light text-muted-foreground">
             {t("quiz.subtitle")}
           </p>
-          <div className="mb-8 w-full rounded-xl border border-border bg-card p-4">
+          <div className="mb-8 w-full rounded-2xl bg-card p-6 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-card-foreground">
               {t("quiz.factsTitle")}
             </h2>

@@ -11,12 +11,11 @@ import {
   FileTextIcon,
   GlobeIcon,
   RotateCcwIcon,
-  ShieldAlertIcon,
-  ShieldCheckIcon,
 } from "lucide-react";
 import type { RiskCategory } from "@/lib/quiz-logic";
 import { downloadPrepPdf } from "@/lib/prep-pdf";
 import { trackGoal } from "@/lib/analytics";
+import clipboardImg from "@/static/clipboard.png";
 
 const DOCTOR_INSTAGRAM_URL = "https://www.instagram.com/1onko_spb/";
 const CLINIC_WEBSITE_URL = "https://onkoklinik.ru/";
@@ -26,28 +25,14 @@ interface ResultsScreenProps {
   onRestart: () => void;
 }
 
-const riskConfig: Record<
-  RiskCategory,
-  {
-    icon: typeof ShieldCheckIcon;
-    badgeClass: string;
-    iconContainerClass: string;
-    iconClass: string;
-  }
-> = {
+const riskConfig: Record<RiskCategory, { badgeClass: string }> = {
   low: {
-    icon: ShieldCheckIcon,
     badgeClass:
       "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200",
-    iconContainerClass: "bg-emerald-100 dark:bg-emerald-900/50",
-    iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   high: {
-    icon: ShieldAlertIcon,
     badgeClass:
       "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200",
-    iconContainerClass: "bg-amber-100 dark:bg-amber-900/50",
-    iconClass: "text-amber-600 dark:text-amber-400",
   },
 };
 
@@ -94,7 +79,6 @@ function buildPdfHtml(
 export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
   const { t } = useTranslation();
   const config = riskConfig[risk];
-  const Icon = config.icon;
 
   const checklist = t(`results.checklist.${risk}`, {
     returnObjects: true,
@@ -140,11 +124,11 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
 
         <div className="flex flex-1 flex-col px-6 pb-8">
           <div className="mb-6 flex flex-col items-center">
-            <div
-              className={`mb-4 flex size-16 items-center justify-center rounded-2xl ${config.iconContainerClass}`}
-            >
-              <Icon className={`size-8 ${config.iconClass}`} />
-            </div>
+            <img
+              src={clipboardImg}
+              alt=""
+              className="mb-4 w-32 mix-blend-multiply"
+            />
             <h1 className="mb-3 text-2xl font-semibold tracking-tight text-foreground">
               {t("results.title")}
             </h1>
@@ -160,7 +144,7 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
             {t(`results.${risk}Desc`)}
           </p>
 
-          <div className="mb-6 rounded-xl border border-border bg-card p-4">
+          <div className="mb-6 rounded-2xl bg-card p-6 shadow-sm">
             <h3 className="mb-4 text-base font-semibold text-card-foreground">
               {t("results.recommendations")}
             </h3>
@@ -177,7 +161,7 @@ export function ResultsScreen({ risk, onRestart }: ResultsScreenProps) {
             </div>
           </div>
 
-          <div className="mb-6 rounded-xl border border-primary/20 bg-primary/5 p-4">
+          <div className="mb-6 rounded-2xl bg-primary/5 p-6">
             <h3 className="mb-1 text-base font-semibold text-card-foreground">
               {t("results.doctor.title")}
             </h3>

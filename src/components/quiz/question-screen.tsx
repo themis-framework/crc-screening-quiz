@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LanguageToggle } from "./language-toggle";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import stethoscopeImg from "@/static/stetoscope.png";
 import type { QuizAnswers, AgeRange, YesNo } from "@/lib/quiz-logic";
 
 interface QuestionScreenProps {
@@ -124,8 +125,13 @@ export function QuestionScreen({
           <Progress value={progress} className="h-1.5" />
         </div>
 
-        <div className="flex flex-1 flex-col justify-center px-6 pb-6">
+        <div className="flex flex-1 flex-col justify-start px-6 pt-10 pb-6">
           <div className="mb-8 text-center">
+            <img
+              src={stethoscopeImg}
+              alt=""
+              className="mx-auto mb-4 w-24 mix-blend-multiply"
+            />
             <h2 className="mb-2 text-2xl font-semibold tracking-tight text-foreground">
               {t(`questions.${questionKey}.title`)}
             </h2>
