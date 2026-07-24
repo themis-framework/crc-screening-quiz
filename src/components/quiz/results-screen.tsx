@@ -84,35 +84,29 @@ export function ResultsScreen({ risk }: ResultsScreenProps) {
     returnObjects: true,
   }) as unknown as string[];
 
-  const handleShare = async () => {
+  const handleShare = () => {
     trackGoal("share_click");
     const url = window.location.origin + window.location.pathname;
-    const shareData = {
-      title: t("quiz.title"),
-      text: t("results.shareText"),
-      url,
-    };
     if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-        return;
-      } catch {
-        // пользователь закрыл системное окно шэринга - это не ошибка
-        return;
-      }
+      navigator
+        .share({ title: t("quiz.title"), text: t("results.shareText"), url })
+        .catch(() => {
+          // пользователь закрыл системное окно шэринга - это не ошибка
+        });
+      return;
     }
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch {
-      // clipboard API может быть недоступен - страховка через execCommand
-      const textarea = document.createElement("textarea");
-      textarea.value = url;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
+    // без Web Share API копируем ссылку: синхронный execCommand срабатывает
+    // прямо на клике, clipboard API - асинхронная страховка
+    const textarea = document.createElement("textarea");
+    textarea.value = url;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(textarea);
+    if (!copied) {
+      navigator.clipboard?.writeText(url).catch(() => {});
     }
     toast(t("results.linkCopied"));
   };
